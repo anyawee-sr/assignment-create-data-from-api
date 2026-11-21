@@ -1,12 +1,10 @@
-import type { IUser } from "../types.js";
-
 /**
  * NOTE: Get all users from the API
  * see more: https://dummyjson.com/docs/users#users-limit_skip
  */
-const API_URL = "https://dummyjson.com/users?limit=0";
+const API_URL = 'https://dummyjson.com/users?limit=0';
 
-export const fetchUsers = async (): Promise<IUser[]> => {
+export const fetchUserList = async (): Promise<unknown> => {
   const res = await fetch(API_URL);
 
   if (!res.ok) {
@@ -15,5 +13,5 @@ export const fetchUsers = async (): Promise<IUser[]> => {
 
   const data = await res.json();
 
-  return data.users;
+  return data;
 };
