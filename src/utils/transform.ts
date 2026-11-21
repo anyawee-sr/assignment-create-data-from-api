@@ -1,25 +1,7 @@
-import type { IUser } from "../types.js";
+import type { IUserResponse } from '../types/services/user.js';
+import type { IDepartmentGroup, IDepartmentSummary } from '../types/transform/user.js';
 
-type THairColor = Record<string, number>;
-type TAddressUser = Record<string, string>;
-
-interface IDepartmentSummary {
-  male: number;
-  female: number;
-  ageRange: string;
-  hair: THairColor;
-  addressUser: TAddressUser;
-}
-
-interface IDepartmentGroup {
-  summary: IDepartmentSummary;
-  minAge: number;
-  maxAge: number;
-}
-
-type TGroupByDepartment = (users: IUser[]) => Record<string, IDepartmentSummary>;
-
-export const groupByDepartment: TGroupByDepartment = (users) => {
+export const groupByDepartment = (users: IUserResponse[]): Record<string, IDepartmentSummary> => {
   const groups = new Map<string, IDepartmentGroup>();
 
   for (const user of users) {
@@ -30,7 +12,7 @@ export const groupByDepartment: TGroupByDepartment = (users) => {
       hair: { color },
       address: { postalCode },
       firstName,
-      lastName
+      lastName,
     } = user;
 
     let group = groups.get(department);
@@ -46,7 +28,7 @@ export const groupByDepartment: TGroupByDepartment = (users) => {
         },
         minAge: age,
         maxAge: age,
-      }
+      };
 
       groups.set(department, group);
     }
@@ -77,4 +59,4 @@ export const groupByDepartment: TGroupByDepartment = (users) => {
   }
 
   return result;
-}
+};
