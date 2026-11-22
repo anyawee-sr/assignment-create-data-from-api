@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package users;
+
+service UserService {
+  rpc GetUsersGroupedByDepartment (GetUsersGroupedByDepartmentRequest)
+      returns (GetUsersGroupedByDepartmentResponse);
+}
+
+message DepartmentSummary {
+  int32 male = 1;
+  int32 female = 2;
+  string age_range = 3;
+  map<string, int32> hair = 4;
+  map<string, string> address_user = 5;
+}
+
+message GetUsersGroupedByDepartmentResponse {
+  map<string, DepartmentSummary> departments = 1;
+}
+
+message GetUsersGroupedByDepartmentRequest {}

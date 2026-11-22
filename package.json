@@ -4,12 +4,15 @@
   "private": true,
   "description": "",
   "engines": {
-    "node": ">=22"
+    "node": ">=22.22.1"
   },
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc -p tsconfig.build.json",
     "start": "node dist/index.js",
+    "dev:grpc": "tsx watch src/grpc/index.ts",
+    "start:grpc": "node dist/grpc/index.js",
+    "grpc:client": "tsx src/grpc/client.ts",
     "test": "vitest",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -38,6 +41,8 @@
   },
   "homepage": "https://github.com/anyawee-sr/create-data-from-api#readme",
   "dependencies": {
+    "@grpc/grpc-js": "^1.14.7",
+    "@grpc/proto-loader": "^0.8.1",
     "fastify": "^5.12.8"
   },
   "devDependencies": {
