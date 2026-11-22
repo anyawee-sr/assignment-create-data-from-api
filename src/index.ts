@@ -3,7 +3,9 @@ import { fetchUserList } from './services/users.js';
 import { transformUserListGroupByDepartment } from './utils/transform.js';
 import { isResUsers } from './utils/resTypeCheck.js';
 
-const app = fastify();
+const PORT = Number(process.env.PORT ?? 3000);
+
+const app = fastify({ logger: true });
 
 app.get('/users/grouped-by-department', async () => {
   const data = await fetchUserList();
@@ -15,4 +17,9 @@ app.get('/users/grouped-by-department', async () => {
   return transformUserListGroupByDepartment(data.users);
 });
 
-app.listen({ port: 3000 });
+try {
+  await app.listen({ port: PORT });
+} catch (err) {
+  app.log.error(err);
+  process.exit(1);
+}
