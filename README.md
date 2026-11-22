@@ -23,7 +23,7 @@ Source: [7-solutions/frontend-assignment — 2. Create data from API (optional)]
 
 ## Requirements
 
-- Node.js 22+
+- Node.js 22.22.1+ (or 24+)
 
 ## Getting started
 
