@@ -38,6 +38,8 @@
   },
   "homepage": "https://github.com/anyawee-sr/create-data-from-api#readme",
   "dependencies": {
+    "@grpc/grpc-js": "^1.14.7",
+    "@grpc/proto-loader": "^0.8.1",
     "fastify": "^5.12.8"
   },
   "devDependencies": {
