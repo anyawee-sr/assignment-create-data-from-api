@@ -9,7 +9,7 @@ app.get('/users/grouped-by-department', async () => {
   const data = await fetchUserList();
 
   if (!isResUsers(data)) {
-    throw Object.assign(new Error('Unexpected response shape from users API'));
+    throw new Error('Unexpected response shape from users API');
   }
 
   return transformUserListGroupByDepartment(data.users);
