@@ -1,13 +1,25 @@
-import fastify from "fastify";
-import { fetchUsers } from "./services/userApi.js";
-import { groupByDepartment } from "./services/transform.js";
+import fastify from 'fastify';
+import { fetchUserList } from './services/users.js';
+import { transformUserListGroupByDepartment } from './utils/transform.js';
+import { isResUsers } from './utils/resTypeCheck.js';
 
-const app = fastify();
+const PORT = Number(process.env.PORT ?? 3000);
+
+const app = fastify({ logger: true });
 
 app.get('/users/grouped-by-department', async () => {
-  const users = await fetchUsers();
+  const data = await fetchUserList();
 
-  return groupByDepartment(users);
+  if (!isResUsers(data)) {
+    throw new Error('Unexpected response shape from users API');
+  }
+
+  return transformUserListGroupByDepartment(data.users);
 });
 
-app.listen({ port: 3000 });
+try {
+  await app.listen({ port: PORT });
+} catch (err) {
+  app.log.error(err);
+  process.exit(1);
+}
