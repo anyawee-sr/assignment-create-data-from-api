@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { groupByDepartment } from '../utils/transform.js';
+import { transformUserListGroupByDepartment } from '../utils/transform.js';
 import type { IAddressResponse, IHairResponse, IUserResponse } from '../types/services/user.js';
 
 const baseAddress: IAddressResponse = {
@@ -74,9 +74,9 @@ const makeUser = ({ hair, address, company, ...rest }: IUserOverrides = {}): IUs
   };
 };
 
-describe('groupByDepartment', () => {
+describe('transformUserListGroupByDepartment', () => {
   it('returns empty object for empty input', () => {
-    expect(groupByDepartment([])).toEqual({});
+    expect(transformUserListGroupByDepartment([])).toEqual({});
   });
 
   it('groups users by department', () => {
@@ -85,7 +85,7 @@ describe('groupByDepartment', () => {
       makeUser({ company: { department: 'Marketing' } }),
     ];
 
-    const result = groupByDepartment(data);
+    const result = transformUserListGroupByDepartment(data);
 
     expect(Object.keys(result).sort()).toEqual(['Engineering', 'Marketing']);
   });
@@ -97,7 +97,7 @@ describe('groupByDepartment', () => {
       makeUser({ gender: 'female' }),
     ];
 
-    const result = groupByDepartment(data);
+    const result = transformUserListGroupByDepartment(data);
 
     expect(result.Engineering?.male).toBe(1);
     expect(result.Engineering?.female).toBe(2);
@@ -106,14 +106,14 @@ describe('groupByDepartment', () => {
   it('calculates age range', () => {
     const data = [makeUser({ age: 40 }), makeUser({ age: 22 }), makeUser({ age: 35 })];
 
-    const result = groupByDepartment(data);
+    const result = transformUserListGroupByDepartment(data);
 
     expect(result.Engineering?.ageRange).toBe('22-40');
   });
 
   it('uses same age for min and max when only one user', () => {
     const data = [makeUser({ age: 30 })];
-    const result = groupByDepartment(data);
+    const result = transformUserListGroupByDepartment(data);
 
     expect(result.Engineering?.ageRange).toBe('30-30');
   });
@@ -125,7 +125,7 @@ describe('groupByDepartment', () => {
       makeUser({ hair: { color: 'Blond' } }),
     ];
 
-    const result = groupByDepartment(data);
+    const result = transformUserListGroupByDepartment(data);
 
     expect(result.Engineering?.hair).toEqual({ Black: 2, Blond: 1 });
   });
@@ -141,7 +141,7 @@ describe('groupByDepartment', () => {
       }),
     ];
 
-    const result = groupByDepartment(data);
+    const result = transformUserListGroupByDepartment(data);
 
     expect(result.Engineering?.addressUser).toEqual({ TerryMedhurst: '12345' });
   });

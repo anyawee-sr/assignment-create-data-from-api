@@ -1,7 +1,10 @@
+import type { ICompanyResponse } from '../services/user.js';
+
+type TDepartment = ICompanyResponse['department'];
 type THairColor = Record<string, number>;
 type TAddressUser = Record<string, string>;
 
-export interface IDepartmentSummary {
+export interface ITransformDepartmentSummary {
   male: number;
   female: number;
   ageRange: string;
@@ -9,8 +12,14 @@ export interface IDepartmentSummary {
   addressUser: TAddressUser;
 }
 
-export interface IDepartmentGroup {
-  summary: IDepartmentSummary;
+export type TTransformUserListGroupByDepartment = Record<TDepartment, ITransformDepartmentSummary>;
+
+export interface IMetaAgeRange {
   minAge: number;
   maxAge: number;
+}
+
+export interface IDepartmentAccumulator {
+  meta: Record<TDepartment, IMetaAgeRange>;
+  summary: TTransformUserListGroupByDepartment;
 }

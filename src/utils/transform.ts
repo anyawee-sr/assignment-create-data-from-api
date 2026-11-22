@@ -1,62 +1,53 @@
 import type { IUserResponse } from '../types/services/user.js';
-import type { IDepartmentGroup, IDepartmentSummary } from '../types/transform/user.js';
+import type {
+  IDepartmentAccumulator,
+  TTransformUserListGroupByDepartment,
+} from '../types/transform/user.js';
 
-export const groupByDepartment = (users: IUserResponse[]): Record<string, IDepartmentSummary> => {
-  const groups = new Map<string, IDepartmentGroup>();
+export const transformUserListGroupByDepartment = (
+  users: IUserResponse[],
+): TTransformUserListGroupByDepartment => {
+  const groups = users.reduce<IDepartmentAccumulator>(
+    (acc, user) => {
+      let meta = acc.meta[user.company.department];
+      let summary = acc.summary[user.company.department];
 
-  for (const user of users) {
-    const {
-      company: { department },
-      age,
-      gender,
-      hair: { color },
-      address: { postalCode },
-      firstName,
-      lastName,
-    } = user;
-
-    let group = groups.get(department);
-
-    if (!group) {
-      group = {
-        summary: {
+      // #region - init department on first user
+      if (!meta || !summary) {
+        meta = { minAge: user.age, maxAge: user.age };
+        summary = {
           male: 0,
           female: 0,
           ageRange: '',
           hair: {},
           addressUser: {},
-        },
-        minAge: age,
-        maxAge: age,
-      };
+        };
 
-      groups.set(department, group);
-    }
+        acc.meta[user.company.department] = meta;
+        acc.summary[user.company.department] = summary;
+      }
+      // #endregion - init department on first user
 
-    const { summary } = group;
+      summary.hair[user.hair.color] = (summary.hair[user.hair.color] ?? 0) + 1;
+      summary.addressUser[`${user.firstName}${user.lastName}`] = user.address.postalCode;
 
-    if (gender === 'male') {
-      summary.male++;
-    } else if (gender === 'female') {
-      summary.female++;
-    }
+      if (user.gender === 'male') {
+        summary.male++;
+      } else if (user.gender === 'female') {
+        summary.female++;
+      }
 
-    if (age < group.minAge) {
-      group.minAge = age;
-    } else if (age > group.maxAge) {
-      group.maxAge = age;
-    }
+      // #region - age handle
+      meta.minAge = Math.min(meta.minAge, user.age);
+      meta.maxAge = Math.max(meta.maxAge, user.age);
 
-    summary.hair[color] = (summary.hair[color] ?? 0) + 1;
-    summary.addressUser[`${firstName}${lastName}`] = postalCode;
-  }
+      summary.ageRange = `${meta.minAge}-${meta.maxAge}`;
+      // #endregion - age handle
 
-  const result: Record<string, IDepartmentSummary> = {};
+      return acc;
+    },
+    { meta: {}, summary: {} },
+  );
 
-  for (const [department, group] of groups) {
-    group.summary.ageRange = `${group.minAge}-${group.maxAge}`;
-    result[department] = group.summary;
-  }
-
-  return result;
+  return groups.summary;
 };
