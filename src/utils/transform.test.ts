@@ -1,6 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { transformUserListGroupByDepartment } from '../utils/transform.js';
-import type { IAddressResponse, IHairResponse, IUserResponse } from '../types/services/user.js';
+import { transformUserListGroupByDepartment } from './transform.js';
+import type {
+  IAddressResponse,
+  ICompanyResponse,
+  IHairResponse,
+  IUserResponse,
+} from '../types/services/user.js';
 
 const baseAddress: IAddressResponse = {
   address: '1 Main St',
@@ -61,7 +66,7 @@ interface IUserOverrides extends Partial<
 > {
   hair?: Partial<IHairResponse>;
   address?: Partial<IAddressResponse>;
-  company?: { department: string };
+  company?: Partial<ICompanyResponse>;
 }
 
 const makeUser = ({ hair, address, company, ...rest }: IUserOverrides = {}): IUserResponse => {

@@ -4,7 +4,7 @@ type TDepartment = ICompanyResponse['department'];
 type THairColor = Record<string, number>;
 type TAddressUser = Record<string, string>;
 
-export interface ITransformDepartmentSummary {
+interface ITransformDepartmentSummary {
   male: number;
   female: number;
   ageRange: string;
@@ -14,7 +14,7 @@ export interface ITransformDepartmentSummary {
 
 export type TTransformUserListGroupByDepartment = Record<TDepartment, ITransformDepartmentSummary>;
 
-export interface IMetaAgeRange {
+interface IMetaAgeRange {
   minAge: number;
   maxAge: number;
 }
