@@ -151,15 +151,14 @@ proto/
 src/
 ├── index.ts                         # HTTP entrypoint
 ├── http/
-│   └── server.ts                    # Fastify server and route
+│   └── server.ts                    # Fastify server and route (fetch, validate, transform)
 ├── grpc/
 │   ├── index.ts                     # gRPC entrypoint
-│   ├── server.ts                    # gRPC service handler
+│   ├── server.ts                    # gRPC service handler (fetch, validate, transform)
 │   ├── proto.ts                     # Load users.proto
 │   └── client.ts                    # Example gRPC client
 ├── services/
-│   ├── users.ts                     # Fetch users from dummyjson
-│   └── usersGroupedByDepartment.ts  # Fetch, validate and transform (shared by HTTP and gRPC)
+│   └── users.ts                     # Fetch users from dummyjson
 ├── types/
 │   ├── services/user.ts             # API response types
 │   └── transform/user.ts            # Transform result types

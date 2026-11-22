@@ -4,14 +4,24 @@ import {
   type IGetUsersGroupedByDepartmentResponse,
   type TGetUsersGroupedByDepartmentRequest,
 } from './proto.js';
-import { getUsersGroupedByDepartment } from '../services/usersGroupedByDepartment.js';
+import { fetchUserList } from '../services/users.js';
+import { isResUsers } from '../utils/resTypeCheck.js';
+import { transformUserListGroupByDepartment } from '../utils/transform.js';
 
 const getUsersGroupedByDepartmentHandler: grpc.handleUnaryCall<
   TGetUsersGroupedByDepartmentRequest,
   IGetUsersGroupedByDepartmentResponse
 > = async (_call, callback) => {
   try {
-    callback(null, { departments: await getUsersGroupedByDepartment() });
+    const data = await fetchUserList();
+
+    if (!isResUsers(data)) {
+      throw new Error('Unexpected response shape from users API');
+    }
+
+    callback(null, {
+      departments: transformUserListGroupByDepartment(data.users),
+    });
   } catch (err) {
     console.error(err);
 
