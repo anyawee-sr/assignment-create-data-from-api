@@ -12,6 +12,7 @@
     "start": "node dist/index.js",
     "dev:grpc": "tsx watch src/grpc/index.ts",
     "start:grpc": "node dist/grpc/index.js",
+    "grpc:client": "tsx src/grpc/client.ts",
     "test": "vitest",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
